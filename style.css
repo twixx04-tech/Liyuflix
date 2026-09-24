@@ -1,0 +1,32 @@
+:root { --bg-dark: #0a0a0c; --accent-red: #e50914; --panel-bg: rgba(20, 20, 25, 0.95); }
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: sans-serif; background-color: var(--bg-dark); color: #fff; overflow: hidden; }
+#main-landing { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 9999; background: radial-gradient(circle at center, #1c1c24 0%, #050508 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.brand-header { font-size: 3.5rem; font-weight: 900; color: var(--accent-red); text-transform: uppercase; letter-spacing: 2px; }
+.tagline { color: #888; margin-bottom: 40px; }
+.input-card { background: var(--panel-bg); border: 1px solid #222; border-radius: 12px; padding: 30px; width: 90%; max-width: 450px; text-align: center; }
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label { display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 8px; }
+input[type="file"], input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; background: #141418; border: 1px solid #333; color: white; border-radius: 6px; }
+.divider { margin: 15px 0; color: #555; }
+.btn-launch { background: var(--accent-red); color: white; border: none; width: 100%; padding: 14px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+#workspace-container { display: flex; width: 100%; height: 100%; position: relative; visibility: hidden; }
+#player-wrapper { flex-grow: 1; height: 100%; position: relative; background: #000; display: flex; align-items: center; justify-content: center; }
+video { width: 100%; height: 100%; object-fit: contain; }
+video.crop-mode { object-fit: cover; }
+video.fit-mode { object-fit: fill; }
+.hud-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 20px; box-sizing: border-box; z-index: 50; }
+.hud-row { display: flex; justify-content: space-between; align-items: center; }
+.hud-left, .hud-right { display: flex; gap: 10px; align-items: center; }
+.hud-btn { background: rgba(255,255,255,0.1); border: none; color: white; padding: 8px 14px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+.hud-btn.active { background: var(--accent-red); }
+select { background: #141418; color: white; border: 1px solid #444; padding: 8px; border-radius: 4px; }
+#chat-sidebar { width: 350px; height: 100%; background: #0b0b0e; border-left: 1px solid #1a1a22; display: flex; flex-direction: column; z-index: 40; }
+#chat-sidebar.hidden { display: none !important; }
+#chat-floating { position: absolute; right: 20px; top: 20px; width: 320px; height: 400px; background: rgba(10,10,15,0.65); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; display: none; flex-direction: column; z-index: 60; backdrop-filter: blur(5px); }
+.chat-header-text { padding: 10px; font-size: 0.8rem; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); color: #aaa; text-transform: uppercase; }
+.chat-body { flex-grow: 1; overflow-y: auto; padding: 12px; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; }
+.chat-row-msg b { color: var(--accent-red); }
+.chat-footer { padding: 10px; display: flex; gap: 6px; border-top: 1px solid rgba(255,255,255,0.1); }
+.chat-footer input { flex-grow: 1; padding: 8px; background: rgba(0,0,0,0.4); border: 1px solid #333; color: white; border-radius: 4px; }
+#theater-3d-container { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 30; visibility: hidden; }
+.hide-native-video { visibility: hidden !important; opacity: 0 !important; }
