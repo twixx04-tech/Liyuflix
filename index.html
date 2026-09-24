@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiyuFlix - Ultimate Vercel Cinema</title>
+    <!-- WebGL optimized A-Frame library for the 3D Engine -->
+    <script src="https://aframe.io"></script>
+    <!-- Socket.io client to connect to your free server -->
+    <script src="https://socket.io"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. MAIN HUB LANDING SCREEN -->
+    <div id="main-landing">
+        <div class="brand-header">LiyuFlix</div>
+        <div class="tagline">Synchronized Media & Virtual Cinema Rooms</div>
+        <div class="input-card">
+            <div class="input-group">
+                <label>OPTION A: UPLOAD LOCAL OFFLINE MOVIE</label>
+                <input type="file" id="media-file-picker" accept="video/*">
+            </div>
+            <div class="divider">OR</div>
+            <div class="input-group">
+                <label>OPTION B: STREAMABLE VIDEO LINK URL</label>
+                <input type="text" id="media-url-picker" placeholder="https://example.com">
+            </div>
+            <button class="btn-launch" id="btn-enter-flix">Enter Cinema Room</button>
+        </div>
+    </div>
+
+    <!-- 2. CORE WORKSPACE ENVIRONMENT -->
+    <div id="workspace-container">
+        
+        <!-- Media Output Base Frame -->
+        <div id="player-wrapper">
+            <!-- Target media streaming component track tag player element -->
+            <video id="main-video-player" playsinline webkit-playsinline crossOrigin="anonymous"></video>
+
+            <!-- 3. THE VIRTUAL 3D CINEMA LAYER (Fully isolated until requested) -->
+            <div id="theater-3d-container">
+                <!-- Freezes WebGL computing calculations completely on initial startup boot paths -->
+                <a-scene embedded vr-mode-ui="enabled: false" renderer="antialias: false; precision: medium; powerPreference: high-performance" paused>
+                    <a-assets>
+                        <canvas id="video-mirror-canvas"></canvas>
+                    </a-assets>
+
+                    <!-- Camera Rig with Variable Scroll Zoom Boundaries -->
+                    
+                        
+                    
+
+                    <!-- Large Silver Cinema Projection Surface screen -->
+                    <a-video id="3d-cinema-screen" src="#video-mirror-canvas" width="12" height="6.75" position="0 4.5 -6"></a-video>
+                    <a-box position="0 4.5 -6.05" width="12.3" height="7.05" depth="0.05" color="#050505"></a-box>
+
+                    <!-- Safe flat solid background color instead of structural asset data textures -->
+                    <a-sky color="#020205"></a-sky>
+                    <a-plane rotation="-90 0 0" width="30" height="30" color="#08080c"></a-plane>
+
+                    <!-- Ambient Room Light Controllers -->
+                    <a-light id="cinema-ambient-light" type="ambient" color="#0b0b0f"></a-light>
+                    <a-light id="screen-emissive-glow" type="point" intensity="0.4" position="0 4.5 -4" color="#ffffff"></a-light>
+
+                    <!-- SEATING GRID LAYOUT MAPPING: 2 Rows, Total 8 Seats -->
+                    <!-- Row 1 (Front Row) -->
+                    
+                    
+                    
+                    
+                    <!-- Row 2 (Back Row) - Occupied Target -->
+                    
+                    
+                    
+                    
+
+                    <!-- ROBLOX-STYLE AVATAR NPCs -->
+                    
+                        <a-box width="0.5" height="0.6" depth="0.3" color="#2e86de"></a-box>
+                        <a-box id="npc-head-1" position="0 0.5 0" width="0.32" height="0.32" depth="0.32" color="#ffdbac"></a-box>
+                    
+                    
+                        <a-box width="0.5" height="0.6" depth="0.3" color="#10ac84"></a-box>
+                        <a-box id="npc-head-2" position="0 0.5 0" width="0.32" height="0.32" depth="0.32" color="#e0ac69"></a-box>
+                    
+                </a-scene>
+            </div>
+
+            <!-- PLAYER CONTROLS FOOTER OVERLAY HUD -->
+            <div class="hud-overlay" id="player-hud">
+                <div class="hud-row">
+                    <div class="hud-left">
+                        <button class="hud-btn" id="btn-play-pause">Play</button>
+                        <button class="hud-btn secondary" id="btn-toggle-chat">Hide Chat</button>
+                        <button class="hud-btn secondary" id="btn-toggle-3d">Enable 3D View</button>
+                    </div>
+                    <div class="hud-right">
+                        <button class="hud-btn secondary active" id="btn-size-orig">Original</button>
+                        <button class="hud-btn secondary" id="btn-size-fit">Fit Screen</button>
+                        <button class="hud-btn secondary" id="btn-size-crop">Crop Size</button>
+                        <select id="audio-track-selector"><option value="default">Default Audio Track</option></select>
+                        <select id="light-dimmer-selector">
+                            <option value="0.4">Lights: Dimmed</option>
+                            <option value="0.9">Lights: Bright</option>
+                            <option value="0.05">Lights: Pitch Black</option>
+                        </select>
+                        <button class="hud-btn secondary" id="btn-npc-bubble">NPC Chatter: On</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTEGRATED DEFAULT SIDEBAR CHAT PANEL -->
+        <div id="chat-sidebar">
+            <div class="chat-header-text">LiyuFlix Room Chat</div>
+            <div class="chat-body" id="sidebar-chat-body"></div>
+            <div class="chat-footer">
+                <input type="text" id="sidebar-chat-input" placeholder="Type message...">
+                <button class="hud-btn" id="sidebar-chat-send">Send</button>
+            </div>
+        </div>
+
+        <!-- FLOATING OVERLAY TRANSPARENT TEXT PANEL -->
+        <div id="chat-floating">
+            <div class="chat-header-text">Floating Room Chat</div>
+            <div class="chat-body" id="floating-chat-body"></div>
+            <div class="chat-footer">
+                <input type="text" id="floating-chat-input" placeholder="Type message...">
+                <button class="hud-btn" id="floating-chat-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
