@@ -1,5 +1,5 @@
 // Change this line to your live server link when you launch on Render!
-const socket = io("https://onrender.com"); 
+const socket = io("https://liyuflix-backend.onrender.com/"); 
 
 const video = document.getElementById('main-video-player');
 const landing = document.getElementById('main-landing');
