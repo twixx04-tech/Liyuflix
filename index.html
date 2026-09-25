@@ -1,181 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Watch Together</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiyuFlix - Sync Cinema</title>
+    <!-- Lightweight socket communications -->
+    <script src="https://socket.io"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <main class="container">
-
-        <!-- LOBBY -->
-
-        <section id="lobby" class="card">
-
-            <h1>Watch Together</h1>
-
-            <p class="subtitle">
-                Watch the same local video with a friend.
-            </p>
-
-            <label for="nameInput">
-                Your name
-            </label>
-
-            <input
-                id="nameInput"
-                type="text"
-                maxlength="24"
-                placeholder="Enter your name"
-                autocomplete="off"
-            >
-
-            <button id="createRoomButton">
-                Create Room
-            </button>
-
-            <div class="divider">
-                <span>OR</span>
+    <!-- 1. MAIN HUB LANDING SCREEN -->
+    <div id="main-landing">
+        <div class="brand-header">LiyuFlix</div>
+        <div class="tagline">Synchronized Media & Virtual Cinema Rooms</div>
+        <div class="input-card">
+            <!-- PRIVATE SYNC ROOM CODE BOX -->
+            <div class="input-group">
+                <label>ENTER SYNC ROOM CODE NAME (MUST MATCH YOUR FRIEND)</label>
+                <input type="text" id="sync-room-input" placeholder="e.g., movienight123">
             </div>
+            <div class="divider">━ MEDIA CONTROLS ━</div>
+            <div class="input-group">
+                <label>OPTION A: CHOOSE LOCAL MOVIE</label>
+                <!-- FIXED: Native immediate link mapping instead of background file readers -->
+                <input type="file" id="media-file-picker" accept="video/*">
+            </div>
+            <div class="divider">OR</div>
+            <div class="input-group">
+                <label>OPTION B: STREAMABLE VIDEO LINK URL</label>
+                <input type="text" id="media-url-picker" placeholder="https://example.com">
+            </div>
+            <button class="btn-launch" id="btn-enter-flix">Enter Cinema Room</button>
+        </div>
+    </div>
 
-            <label for="roomInput">
-                Room code
-            </label>
+    <!-- 2. CORE WORKSPACE ENVIRONMENT -->
+    <div id="workspace-container">
+        
+        <!-- Media Output Base Frame -->
+        <div id="player-wrapper">
+            <video id="main-video-player" controls playsinline webkit-playsinline crossOrigin="anonymous"></video>
 
-            <input
-                id="roomInput"
-                type="text"
-                maxlength="6"
-                placeholder="ABC123"
-                autocomplete="off"
-            >
+            <!-- 3. THE DYNAMICALLY INJECTED 3D CINEMA CONTAINER -->
+            <div id="theater-3d-container"></div>
 
-            <button id="joinRoomButton">
-                Join Room
-            </button>
-
-            <p id="lobbyStatus" class="status"></p>
-
-        </section>
-
-
-        <!-- WATCH ROOM -->
-
-        <section id="watchRoom" hidden>
-
-            <header class="roomHeader">
-
-                <div>
-                    <h1>Watch Together</h1>
-
-                    <div>
-                        Room:
-                        <strong id="roomCodeDisplay">
-                            ------
-                        </strong>
+            <!-- CONTROLS HUD FOOTER OVERLAY -->
+            <div class="hud-overlay" id="player-hud">
+                <div class="hud-row">
+                    <div class="hud-left">
+                        <button class="hud-btn" id="btn-play-pause">Play</button>
+                        <button class="hud-btn secondary" id="btn-toggle-chat">Hide Chat</button>
+                        <button class="hud-btn secondary" id="btn-toggle-3d">Enable 3D View</button>
+                    </div>
+                    <div class="hud-right">
+                        <button class="hud-btn secondary active" id="btn-size-orig">Original</button>
+                        <button class="hud-btn secondary" id="btn-size-fit">Fit Screen</button>
+                        <button class="hud-btn secondary" id="btn-size-crop">Crop Size</button>
+                        
+                        <select id="audio-track-selector">
+                            <option value="default">Default Track</option>
+                        </select>
+                        
+                        <select id="light-dimmer-selector" style="display: none;">
+                            <option value="0.4">Lights: Dimmed</option>
+                            <option value="0.9">Lights: Bright</option>
+                            <option value="0.05">Lights: Pitch Black</option>
+                        </select>
+                        <button class="hud-btn secondary" id="btn-npc-bubble" style="display: none;">NPC Chatter: On</button>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div
-                    id="presence"
-                    class="presence"
-                >
-                    Waiting for friend...
-                </div>
+        <!-- SIDEBAR CHAT PANEL -->
+        <div id="chat-sidebar">
+            <div class="chat-header-text" id="room-title-display">LiyuFlix Room Chat</div>
+            <div class="chat-body" id="sidebar-chat-body"></div>
+            <div class="chat-footer">
+                <input type="text" id="sidebar-chat-input" placeholder="Type message...">
+                <button class="hud-btn" id="sidebar-chat-send">Send</button>
+            </div>
+        </div>
 
-            </header>
+        <!-- FLOATING OVERLAY CHAT (Opacity overlay for 3D View mode) -->
+        <div id="chat-floating">
+            <div class="chat-header-text">Floating Room Chat</div>
+            <div class="chat-body" id="floating-chat-body"></div>
+            <div class="chat-footer">
+                <input type="text" id="floating-chat-input" placeholder="Type message...">
+                <button class="hud-btn" id="floating-chat-send">Send</button>
+            </div>
+        </div>
+    </div>
 
-
-            <!-- LOCAL FILE -->
-
-            <section class="card fileCard">
-
-                <label
-                    for="videoFile"
-                    class="fileButton"
-                >
-                    Select Movie
-                </label>
-
-                <input
-                    id="videoFile"
-                    type="file"
-                    accept="video/*"
-                    hidden
-                >
-
-                <span id="fileName">
-                    No movie selected
-                </span>
-
-                <p class="small">
-                    Your movie stays on your device.
-                    It is never uploaded to the server.
-                </p>
-
-            </section>
-
-
-            <!-- VIDEO -->
-
-            <section class="videoCard">
-
-                <video
-                    id="video"
-                    controls
-                    playsinline
-                    preload="metadata"
-                ></video>
-
-            </section>
-
-
-            <!-- CHAT -->
-
-            <section class="card chatCard">
-
-                <h2>Chat</h2>
-
-                <div
-                    id="messages"
-                    class="messages"
-                    aria-live="polite"
-                ></div>
-
-                <form id="chatForm">
-
-                    <input
-                        id="chatInput"
-                        type="text"
-                        maxlength="500"
-                        placeholder="Type a message..."
-                        autocomplete="off"
-                    >
-
-                    <button type="submit">
-                        Send
-                    </button>
-
-                </form>
-
-            </section>
-
-        </section>
-
-    </main>
-
-    <script src="app.js"></script>
-
+    <!-- Script linked at the absolute bottom -->
+    <script src="script.js"></script>
 </body>
-
-                    </html>
+    </html>
+                                                                                          
