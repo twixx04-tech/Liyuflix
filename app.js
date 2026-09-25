@@ -17,7 +17,7 @@
  */
 
 const SIGNAL_SERVER_URL =
-    "wss://YOUR-RENDER-SERVICE.onrender.com";
+    "https://liyuflix-backend-1.onrender.com";
 
 
 /*
